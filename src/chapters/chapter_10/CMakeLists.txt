@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.16)
+project(Chapter_10_FunctionalVsImperative LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Separate executables for each example
+add_executable(blending_functional_imperative src/blending_functional_imperative.cpp)
+add_executable(immutable_data_structures src/immutable_data_structures.cpp)
+add_executable(challenge_functional_refactor src/challenge_functional_refactor.cpp)

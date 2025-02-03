@@ -1,0 +1,98 @@
+# ==================================================
+# 🔹 CLion (JetBrains) project settings
+# ==================================================
+.idea/
+cmake-build-*/
+CMakePresets.json
+CMakeUserPresets.json
+
+# Ignore JetBrains-specific files
+.idea/modules.xml
+.idea/workspace.xml
+.idea/misc.xml
+.idea/cmake.xml
+.idea/.idea.*
+.idea/shelf/
+.idea/assetWizardSettings.xml
+.idea/vcs.xml
+.idea/*
+
+# ==================================================
+# 🔹 Visual Studio Code settings
+# ==================================================
+.vscode/
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+.vscode/c_cpp_properties.json
+.vscode/cmake-kits.json
+.vscode/cmake-tools.json
+
+# ==================================================
+# 🔹 CMake-generated files
+# ==================================================
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+
+# ==================================================
+# 🔹 Ignore build directories (CLion, VS Code, or general)
+# ==================================================
+Chapter_*/build/
+build/
+out/
+bin/
+obj/
+
+# Ignore Makefiles and Autotools-generated files
+Makefile
+Makefile.in
+*.make
+*.mk
+
+# ==================================================
+# 🔹 Compiled binary files and object files
+# ==================================================
+*.o
+*.obj
+*.lo
+*.la
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.exe
+*.out
+
+# ==================================================
+# 🔹 Logs, temporary files, and IDE cache files
+# ==================================================
+*.log
+*.swp
+*.swo
+*.bak
+*.tmp
+*.cache
+*.vscodeignore
+*.code-workspace
+
+# ==================================================
+# 🔹 Package manager files (vcpkg, Conan)
+# ==================================================
+vcpkg_installed/
+vcpkg/buildtrees/
+vcpkg/packages/
+vcpkg/out/
+conanbuildinfo.cmake
+conanbuildinfo.txt
+conan.lock
+.conan/
+
+# ==================================================
+# 🔹 System-dependent files
+# ==================================================
+.DS_Store
+Thumbs.db

@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 3.16)
+project(Chapter_4_TemplateMetaprogramming LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Separate executables for each example
+add_executable(recursive_factorial_template src/recursive_factorial_template.cpp)
+add_executable(constexpr_factorial src/constexpr_factorial.cpp)
+add_executable(constexpr_fibonacci src/constexpr_fibonacci.cpp)
+add_executable(constexpr_matrix_multiplication src/constexpr_matrix_multiplication.cpp)
+add_executable(challenge_constexpr_factorial src/challenge_constexpr_factorial.cpp)
