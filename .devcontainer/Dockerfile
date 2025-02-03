@@ -16,5 +16,5 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
-# Set the default shell to bash
+# Set the default shell to bash.
 ENV SHELL /bin/bash
