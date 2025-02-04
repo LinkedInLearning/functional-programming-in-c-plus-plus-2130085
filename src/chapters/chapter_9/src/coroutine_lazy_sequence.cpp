@@ -47,7 +47,9 @@ Generator generate_numbers() {
 int main() {
     auto gen = generate_numbers();
 
-    while (int value = gen.next(); value != -1) {
+    // Fixed while-loop syntax
+    int value;
+    while ((value = gen.next()) != -1) {
         std::cout << "Generated: " << value << "\n";
     }
 

@@ -3,22 +3,30 @@
 
 namespace hana = boost::hana;
 
-// Compile-time Fibonacci generator
+// Computes the nth Fibonacci number at compile time
 constexpr auto fibonacci = [](auto n) {
-    return hana::unfold_left(1, n, [](auto state) {
-        return hana::if_(state < 2,
-                         hana::make_tuple(state, state + 1),
-                         hana::make_tuple(state, hana::second(state) + hana::first(state)));
-    });
+    // Helper function to compute Fibonacci using fold_left
+    constexpr auto fib_impl = [](auto n, auto acc) {
+        return hana::fold_left(hana::make_range(hana::int_c<0>, n), acc,
+            [](auto acc, auto) {
+                return hana::make_pair(hana::second(acc), hana::first(acc) + hana::second(acc));
+            });
+    };
+    // Extract the second element, which is the nth Fibonacci number
+    return hana::second(fib_impl(n, hana::make_pair(hana::int_c<0>, hana::int_c<1>)));
 };
 
 int main() {
-    constexpr auto fibs = fibonacci(8);
+    // Create a tuple of indices from 0 to 9
+    constexpr auto indices = hana::to_tuple(hana::make_range(hana::int_c<0>, hana::int_c<10>));
+    // Transform indices into their corresponding Fibonacci values
+    constexpr auto fib_values = hana::transform(indices, fibonacci);
 
-    hana::for_each(fibs, [](auto x) {
-        std::cout << x << " ";
+    // Print the Fibonacci sequence
+    hana::for_each(fib_values, [](auto val) {
+        std::cout << val << " ";
     });
-    std::cout << "\n"; // Output: 1 1 2 3 5 8 13 21
+    std::cout << std::endl;
 
     return 0;
 }

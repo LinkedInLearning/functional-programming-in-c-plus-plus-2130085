@@ -1,24 +1,23 @@
 #include <rxcpp/rx.hpp>
 #include <iostream>
-#include <coroutine>
-#include <ranges>
 
-namespace rx = rxcpp;
-
-// Coroutine that returns an observable
-rx::observable<int> generate_values() {
-    for (int i = 1; i <= 10; ++i) {
-        co_yield i;  // Emit each value to the observable stream
-    }
+rxcpp::observable<int> generate_values() {
+    return rxcpp::observable<>::create<int>([](rxcpp::subscriber<int> subscriber) {
+        for (int i = 0; i < 10; ++i) {
+            subscriber.on_next(i);
+        }
+        subscriber.on_completed();
+    });
 }
 
 int main() {
     auto stream = generate_values()
-                  | std::views::filter([](int v) { return v % 2 == 0; })  // Filter even numbers
-                  | std::views::transform([](int v) { return v * 2; });    // Double the values
+        .filter([](int v) { return v % 2 == 0; });  // Use RxCpp's filter operator
 
-    for (int v : stream) {
-        std::cout << "Processed: " << v << "\n";
-    }
+    stream.subscribe(
+        [](int v) { std::cout << "Received: " << v << std::endl; },
+        []() { std::cout << "Stream completed" << std::endl; }
+    );
+
     return 0;
 }

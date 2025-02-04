@@ -1,41 +1,22 @@
 #include <iostream>
-#include <chrono>
 #include <thread>
-#include <coroutine>
+#include <chrono>
 
-// Awaitable timer that suspends the coroutine
-struct Timer {
-    std::chrono::milliseconds duration;
-
-    bool await_ready() { return false; }
-    void await_suspend(std::coroutine_handle<> handle) {
-        std::thread([=]() {
-            std::this_thread::sleep_for(duration);
-            handle.resume();
+class Timer {
+public:
+    void start() {
+        std::thread([this]() {  // Explicitly capture `this`
+            for (int i = 0; i < 5; ++i) {
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+                std::cout << "Tick " << i + 1 << std::endl;
+            }
         }).detach();
     }
-    void await_resume() {}
 };
-
-struct Task {
-    struct promise_type {
-        Task get_return_object() { return {}; }
-        std::suspend_never initial_suspend() { return {}; }
-        std::suspend_never final_suspend() noexcept { return {}; }
-        void return_void() {}
-        void unhandled_exception() { std::terminate(); }
-    };
-};
-
-// Asynchronous coroutine function
-Task run_timer() {
-    std::cout << "Timer started...\n";
-    co_await Timer{std::chrono::seconds(2)};
-    std::cout << "Timer completed!\n";
-}
 
 int main() {
-    run_timer();
-    std::this_thread::sleep_for(std::chrono::seconds(3));  // Wait for coroutine to finish
+    Timer t;
+    t.start();
+    std::this_thread::sleep_for(std::chrono::seconds(6)); // Ensure the program runs long enough
     return 0;
 }

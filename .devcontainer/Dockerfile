@@ -1,20 +1,17 @@
-FROM mcr.microsoft.com/devcontainers/cpp:debian-12
+FROM gcc:13
 
-# Install additional packages
-RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends \
-    build-essential \
+# Install dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     cmake \
+    ninja-build \
     clang \
     clangd \
-    clang-format \
     clang-tidy \
     gdb \
-    ninja-build \
     pkg-config \
-    git \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
+    libboost-all-dev && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Set the default shell to bash.
+# Set default shell
 ENV SHELL /bin/bash
