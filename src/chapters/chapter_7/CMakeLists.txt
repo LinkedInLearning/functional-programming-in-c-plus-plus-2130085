@@ -12,4 +12,6 @@ include_directories(${RXCPP_INCLUDE_DIR})
 # Separate executables for each example
 add_executable(rxcpp_simple_stream src/rxcpp_simple_stream.cpp)
 add_executable(rxcpp_coroutine_ranges src/rxcpp_coroutine_ranges.cpp)
+add_executable(realtime_data_stream src/realtime_data_stream.cpp)
+add_executable(functional_async_event_handling src/functional_async_event_handling.cpp)
 add_executable(challenge_word_frequency src/challenge_word_frequency.cpp)
