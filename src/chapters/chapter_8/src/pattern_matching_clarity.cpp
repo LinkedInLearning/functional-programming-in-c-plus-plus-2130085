@@ -10,7 +10,7 @@ struct PrintVisitor {
 };
 
 int main() {
-    std::variant<int, double, std::string> data = 3.14;
+    std::variant<int, double, std::string> data = 2025;
     std::visit(PrintVisitor{}, data);
     return 0;
 }

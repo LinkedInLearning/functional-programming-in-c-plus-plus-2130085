@@ -59,7 +59,7 @@ int main() {
 
     std::cout << "Main function continues" << std::endl;
     std::this_thread::sleep_for(
-        std::chrono::seconds(3));  // Give coroutine time to finish
+        std::chrono::seconds(5));  // Give coroutine time to finish
 
     delete t;  // Free the allocated memory
 

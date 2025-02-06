@@ -3,6 +3,7 @@
 #include <iostream>
 
 struct Generator {
+
     struct promise_type {
         int current_value;
         std::suspend_always yield_value(int value) {
@@ -11,7 +12,7 @@ struct Generator {
         }
         std::suspend_never initial_suspend() noexcept { return {}; }
         std::suspend_always final_suspend() noexcept { return {}; }
-        Generator get_return_object() { return Generator{*this}; }
+        Generator get_return_object() { return Generator{ *this}; }
         void unhandled_exception() {}
         void return_void() {}
     };

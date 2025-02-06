@@ -1,52 +1,36 @@
-// challenge_adaptive_processor.cpp
-#include <algorithm>
-#include <boost/hana.hpp>
-#include <cctype>
+// challenge_adaptive_process.cpp
 #include <iostream>
-#include <string>
 #include <variant>
-#include <vector>
 
-namespace hana = boost::hana;
+// Expression types
+struct Add {
+    int a, b;
+};
+struct Subtract {
+    int a, b;
+};
+struct Value {
+    int v;
+};
 
-using DataVariant = std::variant<int, std::string, std::vector<double>>;
+// Define the variant for expressions
+using Expression = std::variant<Add, Subtract, Value>;
+
+// Visitor to evaluate the expression
+struct Evaluate {
+    int operator()(Add expr) const { return expr.a + expr.b; }
+    int operator()(Subtract expr) const { return expr.a - expr.b; }
+    int operator()(Value expr) const { return expr.v; }
+};
 
 int main() {
-    DataVariant data = 5;
-    auto config = hana::make_tuple(2.5, 3);
+    Expression expr1 = Add{5, 3};
+    Expression expr2 = Subtract{10, 4};
+    Expression expr3 = Value{42};
 
-    auto visitor = [&](auto& arg) {
-        hana::for_each(config, [&](auto param) {
-            if (std::holds_alternative<int>(data)) {
-                if constexpr (std::is_same_v<decltype(param), double>)
-                    std::cout
-                        << "Int: "
-                        << (std::get<int>(data) * param + hana::at_c<1>(config))
-                        << "\n";
-            } else if (std::holds_alternative<std::string>(data)) {
-                if constexpr (std::is_same_v<decltype(param), double>) {
-                    std::string s = std::get<std::string>(data);
-                    std::transform(
-                        s.begin(), s.end(), s.begin(),
-                        [](unsigned char c) { return std::toupper(c); });
-                    std::cout << "Str: " << s << "\n";
-                }
-            } else if (std::holds_alternative<std::vector<double>>(data)) {
-                if constexpr (std::is_same_v<decltype(param), double>) {
-                    std::cout << "Vec: ";
-                    for (double num : std::get<std::vector<double>>(data))
-                        std::cout << (num * param + hana::at_c<1>(config))
-                                  << " ";
-                    std::cout << "\n";
-                }
-            }
-        });
-    };
+    std::cout << "Result 1: " << std::visit(Evaluate{}, expr1) << "\n";
+    std::cout << "Result 2: " << std::visit(Evaluate{}, expr2) << "\n";
+    std::cout << "Result 3: " << std::visit(Evaluate{}, expr3) << "\n";
 
-    std::visit(visitor, data);
-    data = std::string("less code");
-    std::visit(visitor, data);
-    data = std::vector<double>{1, 2, 3};
-    std::visit(visitor, data);
     return 0;
 }

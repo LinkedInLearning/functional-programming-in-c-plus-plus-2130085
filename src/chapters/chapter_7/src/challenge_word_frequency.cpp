@@ -17,17 +17,18 @@ int main() {
             "hello", "world", "hello", "functional", "world", "programming"
     };
 
-    // Create word stream
+    // 1. Create word stream
     auto stream = word_stream(words);
     std::unordered_map<std::string, int> word_count;
 
-    // Process the stream
-    stream.subscribe([&](const std::string& word) {
-                         word_count[word]++;
-                     },
-                     []() {
-                         std::cout << "Stream completed.\n";
-                     });
+    // 2. Process the stream
+    stream.subscribe(
+        [&](const std::string& word) {word_count[word]++;},
+        []() {std::cout << "Stream completed.\n"; }
+        );
+
+
+    // 3. Render to the console
 
     for (const auto& [word, count] : word_count) {
         std::cout << word << ": " << count << "\n";

@@ -84,5 +84,6 @@
     "typeinfo": "cpp",
     "variant": "cpp",
     "format": "cpp"
-  }
+  },
+  "cmake.sourceDirectory": "/workspaces/functional-programming-in-c-plus-plus-2130085/src/chapters/chapter_1"
 }

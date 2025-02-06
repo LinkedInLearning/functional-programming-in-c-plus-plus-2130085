@@ -18,7 +18,7 @@ void processMessage(const Message& msg) {
                 std::cout << "Processing string message: " << m << std::endl;
             } else if constexpr (std::is_same_v<T, std::vector<double>>) {
                 std::cout << "Processing vector message with " << m.size()
-                          << " elements." << std::endl;
+                    << " elements." << std::endl;
             }
         },
         msg);
@@ -27,7 +27,7 @@ void processMessage(const Message& msg) {
 int main() {
     std::vector<Message> messages = {
         Message(10),
-        Message(std::string("Hello")), 
+        Message(std::string("Hello")),
         Message(std::vector<double>{
             1.0, 2.0, 3.0})
     };

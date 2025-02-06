@@ -7,12 +7,14 @@
 using VarType = std::variant<int, double, std::string>;
 
 int main() {
-    VarType value = 42;  // Initially an int
+    VarType value = 42;
 
     // Define a visitor (overloaded lambdas)
-    auto visitor = [](auto&& arg) {
-        std::cout << "Type: " << typeid(arg).name() << ", Value: " << arg << "\n";
-    };
+    auto visitor =
+        [](auto&& arg) {
+            std::cout << "Type: " << typeid(arg).name() << ", Value: " << arg
+                      << "\n";
+        };
 
     // Apply visitor to the variant
     std::visit(visitor, value);

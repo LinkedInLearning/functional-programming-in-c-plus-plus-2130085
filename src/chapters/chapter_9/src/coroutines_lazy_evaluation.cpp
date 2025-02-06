@@ -19,18 +19,19 @@ struct LazyValue {
     using handle_type = std::coroutine_handle<promise_type>;
     handle_type coroutine;
 
-    LazyValue(handle_type h) : coroutine(h) {}
+     LazyValue(handle_type h) : coroutine(h) {}
     ~LazyValue() { if (coroutine) coroutine.destroy(); }
 
     int get() {
         coroutine.resume();
         return coroutine.promise().value;
     }
+
 };
 
 LazyValue compute_value() {
     std::cout << "Computing value..." << std::endl;
-    co_yield 42; // Simulate a time-consuming computation
+    co_yield 42;
 }
 
 int main() {
