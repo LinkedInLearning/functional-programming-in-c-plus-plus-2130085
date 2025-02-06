@@ -8,11 +8,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Boost REQUIRED)
 
 # Separate executables for each example
-add_executable(stl_transform_accumulate src/stl_transform_accumulate.cpp)
-add_executable(stl_ranges_filter src/stl_ranges_filter.cpp)
-add_executable(boost_hana_tuple src/boost_hana_tuple.cpp)
-add_executable(challenge_stl_hana_pipeline src/stl_hana_pipeline.cpp)
+# add_executable(stl_transform_accumulate src/stl_transform_accumulate.cpp)
+# add_executable(stl_ranges_filter src/stl_ranges_filter.cpp)
+# add_executable(boost_hana_tuple src/boost_hana_tuple.cpp)
+add_executable(challenge_stl_hana_pipeline src/challenge_stl_hana_pipeline.cpp)
 
 # Include Boost headers
-target_include_directories(boost_hana_tuple PRIVATE ${Boost_INCLUDE_DIR})
+# target_include_directories(boost_hana_tuple PRIVATE ${Boost_INCLUDE_DIR})
 target_include_directories(challenge_stl_hana_pipeline PRIVATE ${Boost_INCLUDE_DIR})

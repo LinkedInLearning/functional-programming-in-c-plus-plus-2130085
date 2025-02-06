@@ -10,9 +10,11 @@ namespace hana = boost::hana;
 
 // Generic function to display any iterable
 template <typename Iterable>
-void display(const Iterable& iterable, const std::string& label) {
+void display(Iterable iterable, const std::string& label) {
     std::cout << label << ": ";
-    for (const auto& item : iterable) std::cout << item << " ";
+    for (const auto& item : iterable) {
+        std::cout << item << " ";
+    }
     std::cout << "\n";
 }
 

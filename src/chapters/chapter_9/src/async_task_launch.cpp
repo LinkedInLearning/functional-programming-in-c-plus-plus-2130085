@@ -1,4 +1,3 @@
-// async_task_launch.cpp.cpp
 #include <coroutine>
 #include <iostream>
 #include <memory>
@@ -20,7 +19,7 @@ struct task {
 
     explicit task(handle_type h) : handle(h) {}
 
-    // We no longer destroy the coroutine in the destructor
+    // No destructor cleanup, we handle cleanup elsewhere
     ~task() = default;
 
     void resume() {
@@ -32,14 +31,16 @@ struct task {
     handle_type handle;
 };
 
-// Function to properly manage coroutine execution
+// Run the coroutine in a separate thread while ensuring proper cleanup
 void run_async(task t) {
-    std::thread([handle = t.handle]() mutable {
-        handle.resume();  // Resume coroutine execution
-        if (!handle.done()) {
-            std::cerr << "Coroutine was suspended and not finished\n";
+    std::thread([handle = t.handle]() {
+        handle.resume();  // Run the coroutine
+
+        while (!handle.done()) {
+            std::this_thread::yield();  // Ensure the coroutine is done
         }
-        handle.destroy();  // Safe to destroy now since we check if it's done
+
+        handle.destroy();  // Now it's safe to destroy the coroutine
     }).detach();
 }
 
@@ -52,11 +53,15 @@ task my_async_task() {
 }
 
 int main() {
-    run_async(my_async_task());  // Launch coroutine properly
+    // Allocate the coroutine on the heap to ensure it survives
+    auto* t = new task(my_async_task());
+    run_async(*t);  // Launch coroutine properly
 
     std::cout << "Main function continues" << std::endl;
     std::this_thread::sleep_for(
         std::chrono::seconds(3));  // Give coroutine time to finish
+
+    delete t;  // Free the allocated memory
 
     return 0;
 }
