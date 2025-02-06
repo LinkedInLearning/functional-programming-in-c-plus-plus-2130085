@@ -4,7 +4,7 @@ project(Chapter_8_PatternMatching LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Separate executables for each example
+Separate executables for each example
 add_executable(variant_pattern_matching src/variant_pattern_matching.cpp)
 add_executable(visit_example src/visit_example.cpp)
 add_executable(pattern_matching_clarity src/pattern_matching_clarity.cpp)
