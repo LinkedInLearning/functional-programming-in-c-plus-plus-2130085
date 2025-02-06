@@ -1,20 +1,34 @@
-// functional_imperative_mix.cpp
+// concurrent_tasks_functional.cpp
+#include <algorithm>
+#include <future>
 #include <iostream>
 #include <vector>
-#include <algorithm>
+#include <thread>
+
+int square(int x) {
+    std::cout << "Squaring " << x << " in thread " << std::this_thread::get_id()
+              << std::endl;
+    return x * x;
+}
 
 int main() {
     std::vector<int> numbers = {1, 2, 3, 4, 5};
+    std::vector<std::future<int>> futures;
 
-    // Functional pipeline: Filter even numbers and square them
-    std::vector<int> even_squares;
-    std::copy_if(numbers.begin(), numbers.end(), std::back_inserter(even_squares), [](int x) { return x % 2 == 0; });
-    std::transform(even_squares.begin(), even_squares.end(), even_squares.begin(), [](int x) { return x * x; });
+    // Launch tasks concurrently using std::async
+    std::transform(
+        numbers.begin(), numbers.end(), std::back_inserter(futures),
+        [](int x) { return std::async(std::launch::async, square, x); });
 
-    // Imperative loop: Print the results
-    std::cout << "Even squares: ";
-    for (int num : even_squares) {
-        std::cout << num << " ";
+    std::vector<int> results;
+
+    // Gather results from futures
+    std::transform(futures.begin(), futures.end(), std::back_inserter(results),
+                   [](std::future<int>& f) { return f.get(); });
+
+    std::cout << "Results: ";
+    for (int result : results) {
+        std::cout << result << " ";
     }
     std::cout << std::endl;
 
