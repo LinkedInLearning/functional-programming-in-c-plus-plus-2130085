@@ -30,7 +30,6 @@ std::future<int> launch_async_task(std::function<int(int)> task_func, int input)
 }
 
 int main() {
-    // Input data (immutable)
     const int initial_value = 21;
 
     // Launch the first asynchronous computation
