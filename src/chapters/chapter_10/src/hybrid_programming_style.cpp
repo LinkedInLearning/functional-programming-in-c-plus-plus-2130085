@@ -9,13 +9,15 @@ int main() {
 
     // Functional part (filtering and transformation)
     std::vector<int> processed_data;
-    std::copy_if(data.begin(), data.end(), std::back_inserter(processed_data), [](int x) { return x % 2 == 0; }); // Filter even numbers
-    std::transform(processed_data.begin(), processed_data.end(), processed_data.begin(), [](int x) { return x * 2; }); // Multiply by 2
+    std::copy_if(data.begin(), data.end(), std::back_inserter(processed_data),
+        [](int x) { return x % 2 == 0; });
+    std::transform(processed_data.begin(), processed_data.end(), processed_data.begin(),
+        [](int x) {return x * 2; });
 
     // Imperative part (aggregation with a possible side-effect of printing)
     int sum = 0;
-    for (int value : processed_data) {
-        std::cout << "Processing value: " << value << std::endl;  // Side effect for logging
+    for(int value : processed_data) {
+        std::cout << "Processing value: " << value << std::endl;
         sum += value;
     }
 

@@ -8,13 +8,13 @@ struct ImmutableData {
 
 int main() {
     std::shared_ptr<ImmutableData> data = std::make_shared<ImmutableData>();
-    data->value = 42;
+    data -> value = 42;
 
-    std::shared_ptr<ImmutableData> data2 = data; // Share the data
+    std::shared_ptr<ImmutableData> data2 = data;
 
     // To "modify" immutably, create a new instance
     std::shared_ptr<ImmutableData> data3 = std::make_shared<ImmutableData>();
-    data3->value = data->value + 10;  // Derived from the original data
+    data3->value = data->value + 10;
 
     std::cout << "Data1 value: " << data->value << std::endl;
     std::cout << "Data2 value: " << data2->value << std::endl;

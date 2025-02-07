@@ -1,67 +1,60 @@
-#include <coroutine>
+#include <chrono>
+#include <functional>
+#include <future>
 #include <iostream>
-#include <memory>
 #include <thread>
+#include <utility>
 
-struct task {
-    struct promise_type {
-        task get_return_object() {
-            return task{
-                std::coroutine_handle<promise_type>::from_promise(*this)};
-        }
-        std::suspend_never initial_suspend() noexcept { return {}; }
-        std::suspend_always final_suspend() noexcept { return {}; }
-        void return_void() {}
-        void unhandled_exception() {}
-    };
-
-    using handle_type = std::coroutine_handle<promise_type>;
-
-    explicit task(handle_type h) : handle(h) {}
-
-    // No destructor cleanup, we handle cleanup elsewhere
-    ~task() = default;
-
-    void resume() {
-        if (handle) {
-            handle.resume();
-        }
-    }
-
-    handle_type handle;
-};
-
-// Run the coroutine in a separate thread while ensuring proper cleanup
-void run_async(task t) {
-    std::thread([handle = t.handle]() {
-        handle.resume();  // Run the coroutine
-
-        while (!handle.done()) {
-            std::this_thread::yield();  // Ensure the coroutine is done
-        }
-
-        handle.destroy();  // Now it's safe to destroy the coroutine
-    }).detach();
+// A pure function that performs some computation
+int compute_value(int input) {
+    // Simulate a time-consuming operation
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    return input * 2;
 }
 
-// Coroutine function
-task my_async_task() {
-    std::cout << "Starting async task" << std::endl;
-    std::this_thread::sleep_for(std::chrono::seconds(2));
-    std::cout << "Async task finished" << std::endl;
-    co_return;
+// Another pure function for further processing
+int process_value(int input) {
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    return input + 10;
+}
+
+// Function to launch a computation asynchronously
+std::future<int> launch_async_task(std::function<int(int)> task_func, int input) {
+    std::packaged_task<int(int)> task(task_func);
+    std::future<int> future_result = task.get_future();
+
+    std::thread t([task = std::move(task), input]() mutable { task(input); });
+    t.detach();
+
+    return future_result;
 }
 
 int main() {
-    // Allocate the coroutine on the heap to ensure it survives
-    auto* t = new task(my_async_task());
-    run_async(*t);  // Launch coroutine properly
+    // Input data (immutable)
+    const int initial_value = 21;
+
+    // Launch the first asynchronous computation
+    std::future<int> future_value =
+        launch_async_task(compute_value, initial_value);
 
     std::cout << "Main function continues" << std::endl;
-    std::this_thread::sleep_for(
-        std::chrono::seconds(5));  // Give coroutine time to finish
 
-    delete t;  // Free the allocated memory
+    // Do some other work in the main thread
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+    // Get the intermediate value
+    int intermediate_value = future_value.get();
+    std::cout << "Intermediate value: " << intermediate_value << std::endl;
+
+    // Launch the second asynchronous computation with the intermediate value
+    std::future<int> final_future =
+        launch_async_task(process_value, intermediate_value);
+
+    // Get the final result
+    int final_result = final_future.get();
+
+    std::cout << "Initial value: " << initial_value << std::endl;
+    std::cout << "Final result: " << final_result << std::endl;
 
     return 0;
 }

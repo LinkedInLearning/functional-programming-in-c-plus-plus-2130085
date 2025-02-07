@@ -5,13 +5,9 @@
 #include <thread>
 #include <vector>
 
-void AsyncTask(std::function<void()> task) {
-    std::async(std::launch::async, task);
-}
-
 int main() {
     // Create tasks using lambda expressions and launch them immediately
-    std::future<void> task1 = std::async(std::launch::async, []() {
+    std::future<void> task1 = std::async(std::launch::async, [](){
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
         std::cout << "Task 1 completed\n";
     });
