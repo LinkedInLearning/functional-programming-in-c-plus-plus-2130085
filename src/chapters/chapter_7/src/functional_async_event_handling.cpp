@@ -10,18 +10,10 @@ using EventHandler = std::function<void(const std::string&)>;
 void simulateEventSource(EventHandler handler) {
     std::vector<std::string> events = {"Event 1", "Event 2", "Event 3",
                                        "Event 4", "Event 5"};
-
-    std::vector<std::future<void>> futures;
     for (const auto& event : events) {
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
-        futures.push_back(std::async(std::launch::async, handler, event));
+        std::async(std::launch::async, handler, event);
     }
-
-    // Ensure all async tasks finish
-    for (auto& f : futures) {
-        f.wait();
-    }
-}
 
 int main() {
     EventHandler functionalHandler = [](const std::string& event) {
@@ -39,6 +31,7 @@ int main() {
 
     simulateEventSource(safeFunctionalHandler);
 
+    std::this_thread::sleep_for(std::chrono::seconds(2));
     std::cout << "Exiting main thread." << std::endl;
     return 0;
 }
